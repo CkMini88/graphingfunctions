@@ -9,7 +9,6 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import * as math from "mathjs";
 import Plotly from "plotly.js";
-// Removed: import { MadeWithDyad } from "@/components/made-with-dyad";
 
 
 const GraphingCalculator: React.FC = () => {
