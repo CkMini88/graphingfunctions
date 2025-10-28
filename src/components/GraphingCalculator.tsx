@@ -8,12 +8,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import * as math from "mathjs";
-import Plotly from "plotly.js"; // Changed import path
+import Plotly from "plotly.js";
 import { MadeWithDyad } from "@/components/made-with-dyad";
 
 
 const GraphingCalculator: React.FC = () => {
   const [functionString, setFunctionString] = useState<string>("x^2");
+  const [xMinInput, setXMinInput] = useState<string>("-10");
+  const [xMaxInput, setXMaxInput] = useState<string>("10");
   const [error, setError] = useState<string | null>(null);
   const graphDivRef = useRef<HTMLDivElement>(null);
 
@@ -24,6 +26,21 @@ const GraphingCalculator: React.FC = () => {
 
     if (!functionString.trim()) {
       setError("Please enter a function to graph.");
+      Plotly.purge(graphDivRef.current);
+      return;
+    }
+
+    const parsedXMin = parseFloat(xMinInput);
+    const parsedXMax = parseFloat(xMaxInput);
+
+    if (isNaN(parsedXMin) || isNaN(parsedXMax)) {
+      setError("Min X and Max X must be valid numbers.");
+      Plotly.purge(graphDivRef.current);
+      return;
+    }
+
+    if (parsedXMin >= parsedXMax) {
+      setError("Min X must be less than Max X.");
       Plotly.purge(graphDivRef.current);
       return;
     }
@@ -39,11 +56,9 @@ const GraphingCalculator: React.FC = () => {
 
     const xValues: number[] = [];
     const yValues: number[] = [];
-    const xMin = -10;
-    const xMax = 10;
-    const step = 0.05;
+    const step = (parsedXMax - parsedXMin) / 400; // Generate 400 points for smoothness
 
-    for (let x = xMin; x <= xMax; x += step) {
+    for (let x = parsedXMin; x <= parsedXMax; x += step) {
       try {
         const y = compiledFunction.evaluate({ x: x });
         if (typeof y === "number" && isFinite(y)) {
@@ -57,7 +72,7 @@ const GraphingCalculator: React.FC = () => {
     }
 
     if (xValues.length === 0) {
-      setError("No valid points could be generated for the given function within the default range. Try a different function or range.");
+      setError("No valid points could be generated for the given function within the specified range. Try a different function or range.");
       Plotly.purge(graphDivRef.current);
       return;
     }
@@ -83,12 +98,14 @@ const GraphingCalculator: React.FC = () => {
         zeroline: true,
         zerolinecolor: "#969696",
         gridcolor: "#bdbdbd",
+        range: [parsedXMin, parsedXMax], // Set x-axis range based on user input
       },
       yaxis: {
         title: "y",
         zeroline: true,
         zerolinecolor: "#969696",
         gridcolor: "#bdbdbd",
+        autorange: true, // Keep y-axis auto-ranging for best fit
       },
       hovermode: "closest",
       responsive: true,
@@ -103,7 +120,7 @@ const GraphingCalculator: React.FC = () => {
     Plotly.newPlot(graphDivRef.current, data, layout, {
       displayModeBar: false, // Hide Plotly's mode bar for a cleaner look
     });
-  }, [functionString]);
+  }, [functionString, xMinInput, xMaxInput]); // Re-run plotFunction if range inputs change
 
   useEffect(() => {
     plotFunction();
@@ -115,8 +132,16 @@ const GraphingCalculator: React.FC = () => {
     };
   }, [plotFunction]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFunctionInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFunctionString(e.target.value);
+  };
+
+  const handleXMinInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setXMinInput(e.target.value);
+  };
+
+  const handleXMaxInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setXMaxInput(e.target.value);
   };
 
   const handleGraphClick = () => {
@@ -144,9 +169,31 @@ const GraphingCalculator: React.FC = () => {
               id="function-input"
               placeholder="e.g., x^2 - 3*x + 2"
               value={functionString}
-              onChange={handleInputChange}
+              onChange={handleFunctionInputChange}
               onKeyPress={handleKeyPress}
             />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="xmin-input">Min X</Label>
+              <Input
+                id="xmin-input"
+                type="number"
+                value={xMinInput}
+                onChange={handleXMinInputChange}
+                onKeyPress={handleKeyPress}
+              />
+            </div>
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="xmax-input">Max X</Label>
+              <Input
+                id="xmax-input"
+                type="number"
+                value={xMaxInput}
+                onChange={handleXMaxInputChange}
+                onKeyPress={handleKeyPress}
+              />
+            </div>
           </div>
           <Button onClick={handleGraphClick} className="w-full">
             Graph
