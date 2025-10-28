@@ -8,7 +8,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import * as math from "mathjs";
-import Plotly from "plotly.js/dist/plotly-lite"; // Using plotly-lite for smaller bundle size
+import Plotly from "plotly.js"; // Changed import path
+import { MadeWithDyad } from "@/components/made-with-dyad";
+
 
 const GraphingCalculator: React.FC = () => {
   const [functionString, setFunctionString] = useState<string>("x^2");
