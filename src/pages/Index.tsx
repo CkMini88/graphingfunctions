@@ -2,13 +2,21 @@
 
 import React from 'react';
 import { MadeWithDyad } from "@/components/made-with-dyad";
-import GraphingCalculator from "@/components/GraphingCalculator"; // Import the GraphingCalculator
+import GraphingCalculator from "@/components/GraphingCalculator";
+import ScientificCalculator from "@/components/ScientificCalculator"; // Import the ScientificCalculator
 
 const Index = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-950 p-4">
-      <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200 mb-8">Welcome to your Graphing Calculator!</h1>
-      <GraphingCalculator /> {/* Render the GraphingCalculator component */}
+      <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200 mb-8">Welcome to your Calculators!</h1>
+      <div className="flex flex-col lg:flex-row gap-8 w-full max-w-5xl">
+        <div className="flex-1">
+          <GraphingCalculator />
+        </div>
+        <div className="flex-1">
+          <ScientificCalculator /> {/* Render the ScientificCalculator component */}
+        </div>
+      </div>
       <MadeWithDyad />
     </div>
   );
