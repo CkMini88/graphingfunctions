@@ -32,4 +32,14 @@ export default defineConfig(() => ({
       ],
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          plotly: ['plotly.js'],
+          mathjs: ['mathjs'],
+        },
+      },
+    },
+  },
 }));
