@@ -3,7 +3,6 @@
 import React from 'react';
 import { MadeWithDyad } from "@/components/made-with-dyad";
 import GraphingCalculator from "@/components/GraphingCalculator";
-import ScientificCalculator from "@/components/ScientificCalculator"; // Import the ScientificCalculator
 
 const Index = () => {
   return (
@@ -13,9 +12,7 @@ const Index = () => {
         <div className="flex-1">
           <GraphingCalculator />
         </div>
-        <div className="flex-1">
-          <ScientificCalculator /> {/* Render the ScientificCalculator component */}
-        </div>
+        {/* ScientificCalculator component removed */}
       </div>
       <MadeWithDyad />
     </div>
