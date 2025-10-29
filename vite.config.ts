@@ -8,7 +8,8 @@ import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfil
 export default defineConfig(() => ({
   server: {
     host: "::",
-    port: 80, // Changed port from 8080 to 80
+    port: 80,
+    allowedHosts: ["atvbn-176-222-61-182.a.free.pinggy.link"], // Added Pinggy host
   },
   plugins: [dyadComponentTagger(), react()],
   resolve: {
@@ -20,7 +21,7 @@ export default defineConfig(() => ({
     esbuildOptions: {
       // Node.js global / module polyfill options
       define: {
-        global: 'globalThis', // Define global for older libraries
+        global: 'globalThis',
       },
       plugins: [
         NodeGlobalsPolyfillPlugin({
