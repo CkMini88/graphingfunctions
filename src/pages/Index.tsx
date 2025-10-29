@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { MadeWithDyad } from "@/components/made-with-dyad"; // <-- It's imported here!
+// import { MadeWithDyad } from "@/components/made-with-dyad"; // Removed import
 import GraphingCalculator from "@/components/GraphingCalculator";
 
 const Index = () => {
@@ -14,7 +14,7 @@ const Index = () => {
         </div>
         {/* ScientificCalculator component removed */}
       </div>
-      <MadeWithDyad /> {/* <-- It's used here! */}
+      {/* <MadeWithDyad /> Removed the component */}
     </div>
   );
 };
